@@ -1,18 +1,9 @@
-import pandas as pd
-import streamlit as st
-import requests
-from bs4 import BeautifulSoup
-from sumy.parsers.plaintext import PlaintextParser
-from sumy.nlp.tokenizers import Tokenizer
-from sumy.summarizers.lsa import LsaSummarizer
-from sumy.nlp.stemmers import Stemmer
-from sumy.utils import get_stop_words
+
 
 import streamlit as st
 import pandas as pd
 from keybert import KeyBERT
 from sklearn.feature_extraction.text import TfidfVectorizer
-import pandas as pd
 import matplotlib.pyplot as plt
 import yake
 st.markdown("# Une approche hybride pour l’analyse des documents médicaux")
