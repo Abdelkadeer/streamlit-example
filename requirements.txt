@@ -2,9 +2,4 @@ altair
 pandas
 streamlit
 keybert
-sklearn.feature_extraction.text 
-matplotlib.pyplot
-yake
-wordcloud
-googletrans
-sklearn.metrics
+
