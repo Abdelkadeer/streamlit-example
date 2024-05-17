@@ -4,4 +4,4 @@ streamlit
 matplotlib
 keybert
 yake
-
+wordcloud
