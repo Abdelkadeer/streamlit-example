@@ -16,3 +16,4 @@ colonnes_selectionnees = st.multiselect('Sélectionner les colonnes à visualise
 
 # Filtrer les données en fonction des colonnes sélectionnées
 data_affichee = data_selection[colonnes_selectionnees]
+st.write(data_affichee)
