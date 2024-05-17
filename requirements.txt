@@ -3,4 +3,5 @@ pandas
 streamlit
 matplotlib
 keybert
+yake
 
