@@ -101,18 +101,8 @@ keywords_keybert = model_keybert.extract_keywords(document_selectionne, keyphras
 # Extraire uniquement les mots-clés
 keywords_keybert_list = [keyword for keyword, score in keywords_keybert]
 
-
-# Affichage des mots-clés
-from googletrans import Translator
-# Initialisation du traducteur
-translator = Translator()
-
-# Traduction des mots-clés en français
-keywords_translated = [translator.translate(keyword, src='en', dest='fr').text for keyword in keywords_keybert_list]
-
 st.title('Évaluation du modèle KeyBERT')
-# Affichage des mots-clés traduits
-st.write('Mots-clés (KeyBERT) en français :', ', '.join(keywords_translated))
+
 st.write('Mots-clés (KeyBERT) :', ', '.join(keywords_keybert_list))
 
 # Fonction pour évaluer les mots-clés extraits
