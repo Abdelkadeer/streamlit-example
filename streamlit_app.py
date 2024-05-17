@@ -1,9 +1,6 @@
 import streamlit as st
 import pandas as pd
-from keybert import KeyBERT
-from sklearn.feature_extraction.text import TfidfVectorizer
-import matplotlib.pyplot as plt
-import yake
+
 st.markdown("# Une approche hybride pour l’analyse des documents médicaux")
 # Chargement des données
 data = pd.read_csv('mtsamples.csv')
