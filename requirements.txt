@@ -1,5 +1,6 @@
 altair
 pandas
 streamlit
+matplotlib
 keybert
 
