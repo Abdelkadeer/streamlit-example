@@ -6,12 +6,14 @@ import matplotlib.pyplot as plt
 import yake
 from wordcloud import WordCloud
 
+
+
+
 # Titre et description
 st.markdown("# Une approche hybride pour l’analyse des documents médicaux")
 st.info("L'objectif de cette approche est d'extraire des mots-clés à partir de deux jeux de données : les échantillons de transcription médicale et les avis sur les médicaments")
 st.title('Données Médicales : Extraction des mots clés')
 
-# Chargement des données
 data = pd.read_csv('mtsamples.csv')
 data.rename(columns={"Unnamed: 0": "ID"}, inplace=True)
 colonnes_a_visualiser = ['ID', 'description', 'medical_specialty', 'sample_name', 'transcription', 'keywords']
@@ -25,7 +27,6 @@ data_affichee = data_selection[colonnes_selectionnees]
 
 # Afficher les données sélectionnées
 st.write(data_affichee)
-
 # Compter le nombre de valeurs manquantes pour chaque colonne sélectionnée
 missing_values = data_selection.isnull().sum()
 
@@ -91,44 +92,90 @@ plt.tight_layout()
 # Afficher le graphique avec Streamlit
 st.pyplot(fig)
 
+
+import nltk
+import spacy
+import string
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+
+# Télécharger les ressources nécessaires pour nltk
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
+
+# Charger spacy modèle anglais
+nlp = spacy.load('en_core_web_sm')
+
+# Fonction de préparation des données
+def preprocess_text(text):
+    # Convertir en minuscules
+    text = text.lower()
+    
+    # Supprimer la ponctuation
+    text = text.translate(str.maketrans('', '', string.punctuation))
+    
+    # Tokenizer
+    words = nltk.word_tokenize(text)
+    
+    # Supprimer les stop words
+    stop_words = set(stopwords.words('english'))
+    words = [word for word in words if word not in stop_words]
+    
+    # Lemmatisation
+    lemmatizer = WordNetLemmatizer()
+    words = [lemmatizer.lemmatize(word) for word in words]
+    
+    return ' '.join(words)
 # Sélection du document
 document_selectionne = st.selectbox('Sélectionner un document:', data['transcription'])
+document_pretraite = preprocess_text(document_selectionne)
 
-# Extraction des mots-clés avec KeyBERT
+
 model_keybert = KeyBERT('distilbert-base-nli-mean-tokens')
-keywords_keybert = model_keybert.extract_keywords(document_selectionne, keyphrase_ngram_range=(1, 1), stop_words='english')
+keywords_keybert = model_keybert.extract_keywords(document_pretraite, keyphrase_ngram_range=(1, 1), stop_words='english')
 
 # Extraire uniquement les mots-clés
 keywords_keybert_list = [keyword for keyword, score in keywords_keybert]
 
-st.title('Évaluation du modèle KeyBERT')
-
+def highlight_keywords(text, keywords):
+    for keyword in keywords:
+        text = text.replace(keyword, f"<span style='color: red;'>{keyword}</span>")
+    return text
+st.write("Transcription :")
+st.write(document_selectionne)
+highlighted_text = highlight_keywords(document_pretraite, keywords_keybert_list)
+st.markdown("**Transcription prétraitée avec mots-clés  :**")
+st.markdown(highlighted_text, unsafe_allow_html=True)
 st.write('Mots-clés (KeyBERT) :', ', '.join(keywords_keybert_list))
 
-# Fonction pour évaluer les mots-clés extraits
-def evaluate_keywords(row, extracted_keywords):
-    # Vérifier si la valeur de la colonne 'keywords' est une chaîne de caractères
-    if isinstance(row['keywords'], str):
-        actual_keywords = row['keywords'].split(', ')
+# Initialiser KeyBERT
+kw_model = KeyBERT()
+
+# Titre de l'application
+st.title("Extraction de mots-clés et de phrases clés pour les articles médicaux")
+
+# Zone de texte pour l'utilisateur
+article = st.text_area("Collez votre article médical dans la zone de texte ci-dessus. :", height=300)
+
+# Bouton pour lancer l'extraction des mots-clés
+if st.button("Extraire les mots-clés et les phrases clés"):
+    if article:
+        # Extraire les mots-clés et les phrases clés
+        keywords = kw_model.extract_keywords(article, keyphrase_ngram_range=(1, 2), stop_words='english')
+        
+        # Afficher les résultats
+        st.subheader("Mots-clés et phrases clés extraits :")
+        for keyword, score in keywords:
+            st.write(f"{keyword}: {score:.4f}")
+        top_keywords = keywords
+        top_keywords.reverse()  # Pour afficher les mots-clés avec le score le plus élevé en haut
+        keywords, scores = zip(*top_keywords)
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ax.barh(keywords, scores, color='skyblue')
+        ax.set_title('Les mots-clés extraits')
+        ax.set_xlabel('Score')
+        ax.set_ylabel('Mot-clé')
+        st.pyplot(fig)
     else:
-        actual_keywords = []
-    # Calculer la précision en comparant les mots-clés extraits avec les mots-clés réels
-    precision = len(set(actual_keywords) & set(extracted_keywords)) / len(set(extracted_keywords)) if extracted_keywords else 0
-    recall = len(set(actual_keywords) & set(extracted_keywords)) / len(set(actual_keywords)) if actual_keywords else 0
-    return precision, recall
-
-# Appliquer la fonction sur chaque ligne du DataFrame
-data['precision'], data['recall'] = zip(*data.apply(lambda row: evaluate_keywords(row, keywords_keybert_list), axis=1))
-
-# Calculer le F-score
-data['f_score'] = 2 * (data['precision'] * data['recall']) / (data['precision'] + data['recall'])
-
-# Afficher la précision, le rappel et le F-score pour le document sélectionné
-st.write("Précision :", data['precision'].iloc[0])
-st.write("Rappel :", data['recall'].iloc[0])
-st.write("F-score :", data['f_score'].iloc[0])
-
-
-
-
-
+        st.warning("Veuillez écrire un article médical avant d'extraire les mots-clés et les phrases clés.")
