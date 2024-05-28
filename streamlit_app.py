@@ -100,9 +100,6 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
 # Télécharger les ressources nécessaires pour nltk
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('wordnet')
 
 # Charger spacy modèle anglais
 nlp = spacy.load('en_core_web_sm')
