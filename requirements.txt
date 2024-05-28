@@ -7,6 +7,6 @@ yake
 wordcloud
 nltk
 spacy
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('wordnet')
+punkt
+stopwords
+wordnet
