@@ -99,10 +99,6 @@ import string
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
-# Télécharger les ressources nécessaires pour nltk
-
-# Charger spacy modèle anglais
-nlp = spacy.load('en_core_web_sm')
 
 # Fonction de préparation des données
 def preprocess_text(text):
