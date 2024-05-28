@@ -6,3 +6,4 @@ keybert
 yake
 wordcloud
 nltk
+spacy
