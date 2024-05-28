@@ -7,4 +7,3 @@ yake
 wordcloud
 nltk
 spacy
--e .
