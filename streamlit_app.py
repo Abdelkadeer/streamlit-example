@@ -98,7 +98,7 @@ import spacy
 import string
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
-
+nltk.download('punkt')
 
 # Fonction de préparation des données
 def preprocess_text(text):
