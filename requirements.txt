@@ -7,6 +7,3 @@ yake
 wordcloud
 nltk
 spacy
-punkt
-stopwords
-wordnet
