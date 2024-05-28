@@ -7,4 +7,4 @@ yake
 wordcloud
 nltk
 spacy
-pre_install
+pre_install.
