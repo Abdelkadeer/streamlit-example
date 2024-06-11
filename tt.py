@@ -18,8 +18,7 @@ nltk_data_path = "ntlk.py"
 
 # Ajouter le chemin local à nltk.data.path
 nltk.data.path.append(nltk_data_path)
-# Charger spacy modèle anglais
-nlp = spacy.load('en_core_web_sm')
+
 
 # Fonction de préparation des données
 def preprocess_text(text):
