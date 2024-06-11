@@ -13,11 +13,11 @@ from nltk.stem import WordNetLemmatizer
 import networkx as nx
 from sklearn.metrics.pairwise import cosine_similarity
 
-# Télécharger les ressources nécessaires pour nltk
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('wordnet')
+# Chemin local vers les ressources NLTK dans votre dépôt GitHub
+nltk_data_path = "ntlk.py"
 
+# Ajouter le chemin local à nltk.data.path
+nltk.data.path.append(nltk_data_path)
 # Charger spacy modèle anglais
 nlp = spacy.load('en_core_web_sm')
 
