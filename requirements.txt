@@ -7,5 +7,4 @@ yake
 wordcloud
 nltk
 spacy
--e .
--r pre_install.py
+
