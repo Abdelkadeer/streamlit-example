@@ -6,7 +6,7 @@ from sklearn.cluster import KMeans
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn import svm
 import nltk
-import spacy
+
 import string
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
